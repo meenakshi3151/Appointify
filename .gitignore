@@ -26,3 +26,5 @@ db.sqlite3
 # Configuration files (if sensitive or local-only)
 .env
 config.ini
+
+.DS_Store
