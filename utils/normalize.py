@@ -14,7 +14,7 @@ def normalize_entities_with_gemini(entities, entities_confidence, tz="Asia/Kolka
     Otherwise, return guardrail JSON for ambiguous input.
     """
     threshold = 0.7
-    if entities_confidence < threshold:
+    if float(entities_confidence) < threshold:
         return {"status":"needs_clarification",
                 "message":"Ambiguous date/time or department"}
     now = datetime.now()

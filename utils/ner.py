@@ -59,8 +59,7 @@ def extract_entities_with_gemini(text):
         }
 
 def entity_recognition(content):
-    text = content["raw_text"]
-    gemini_result = extract_entities_with_gemini(text)
+    gemini_result = extract_entities_with_gemini(content)
     confidences = [
         gemini_result.get("date_confidence", 0.0),
         gemini_result.get("time_confidence", 0.0),

@@ -16,8 +16,7 @@ def appointfy():
 
 @app.route('/ocr', methods=['GET', 'POST'])
 def optimal_character_recognition():
-    data = request.get_json()
-    image_path = data.get('image_path') if data else None
+    image_path = request.args.get('image_path') 
     if not image_path:
         return {"error": "Please provide an image_path parameter"}, 400
     ocr_result = text_extraction_from_noisy_image(image_path)
@@ -25,19 +24,16 @@ def optimal_character_recognition():
 
 @app.route('/ner', methods=['GET', 'POST'])
 def named_entity_recognition():
-    raw_text = request.get_json().get('raw_text') if request.is_json else None
+    raw_text = request.args.get('raw_text')
     if not raw_text:
         return {"error": "Please provide a raw_text parameter"}, 400
-    content = {
-        "raw_text": raw_text
-    }
-    ner_result = entity_recognition(content)
+    ner_result = entity_recognition(raw_text)
     return ner_result
 
 @app.route('/normalize', methods=['GET', 'POST'])
 def normalize_entities():
-    entities = request.get_json().get('entities') if request.is_json else None
-    entities_confidence = request.get_json().get('entities_confidence') if request.is_json else None
+    entities = request.args.get('entities')
+    entities_confidence = request.args.get('entities_confidence')
     if not entities or not entities_confidence:
         return {"error": "Please provide entities and entities_confidence parameters"}, 400
     normalize_result = normalize_entities_with_gemini(entities, entities_confidence)
@@ -45,22 +41,18 @@ def normalize_entities():
 
 @app.route('/appointment', methods=['GET', 'POST'])
 def schedule_of_appointment():
-    normalized_entities = request.get_json().get('normalized_entities') if request.is_json else None
-    normalized_entities_confidence = request.get_json().get('normalized_entities_confidence') if request.is_json else None
+    normalized_entities = request.args.get('normalized_entities')
+    normalized_entities_confidence = request.args.get('normalized_entities_confidence')
     if not normalized_entities or not normalized_entities_confidence:
         return {"error": "Please provide normalized and normalized_confidence parameters"}, 400
-    appointment_result = send_appointment({
-        "normalized": normalized_entities,
-        "normalized_confidence": normalized_entities_confidence
-    })
+    appointment_result = send_appointment(json.loads(normalized_entities))
     return appointment_result
 
-@app.route('/get_appointment', methods=['POST'])
+@app.route('/get_appointment', methods=['GET', 'POST'])
 def get_appointment_from_image_or_text():
-    data = request.get_json() if request.is_json else {}
-    image_path = data.get('image_path')
-    input_text = data.get('input_text')
-    timezone = data.get('timezone', "Asia/Kolkata")
+    image_path = request.args.get('image_path')
+    input_text = request.args.get('input_text')
+    timezone = request.args.get('timezone', 'Asia/Kolkata')
     if not image_path and not input_text:
         return {"error": "Please provide either an image_path or input_text parameter"}, 400
     if image_path:
@@ -73,7 +65,7 @@ def get_appointment_from_image_or_text():
     normalize_result = normalize_entities_with_gemini(entities, entities_confidence, tz=timezone)
     if normalize_result.get("status") == "needs_clarification":
         return normalize_result
-    appointment_result = send_appointment(normalize_result)
+    appointment_result = send_appointment(normalize_result["normalized_entities"])
     return appointment_result
 
 # Run the app
