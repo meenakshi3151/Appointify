@@ -34,7 +34,7 @@ Appointify/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/Appointify.git
+git clone https://github.com/meenakshi3151/Appointify.git
 cd Appointify
 
 # 2. Create and activate virtual environment
@@ -51,3 +51,4 @@ pip install -r requirements.txt
 
 # 5. Run the Flask server
 python main.py
+
