@@ -12,6 +12,7 @@ def extract_entities_with_gemini(text):
     """
     Use Gemini to extract date, time, and department with confidence scores.
     """
+    # Prompt to extract entities from the text using Gemini
     prompt = f"""
     Extract the following from the text:
     - date_phrase: natural language date expression
@@ -60,12 +61,14 @@ def extract_entities_with_gemini(text):
 
 def entity_recognition(content):
     gemini_result = extract_entities_with_gemini(content)
+    # Confidence is calculated as average of individual confidences
     confidences = [
         gemini_result.get("date_confidence", 0.0),
         gemini_result.get("time_confidence", 0.0),
         gemini_result.get("department_confidence", 0.0)
     ]
     entities_confidence = round(sum(confidences)/len(confidences), 2)
+    # Prepare final result based on the format provided in the Step 2 description
     result = {
         "entities": {
             "date_phrase": gemini_result.get("date_phrase"),

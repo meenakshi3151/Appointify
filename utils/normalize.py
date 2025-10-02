@@ -20,6 +20,8 @@ def normalize_entities_with_gemini(entities, entities_confidence, tz="Asia/Kolka
     now = datetime.now()
     current_date = now.strftime("%Y-%m-%d")
     current_time = now.strftime("%H:%M")
+    # Prompt to normalize entities using Gemini based on the various descriptions provided in the Step 3 in the assignment doc as well 
+    # some additional cases to be handled like mapping symptoms to departments
     prompt = f"""
     You are a medical appointment entity extractor.
     Current date: {current_date}

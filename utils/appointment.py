@@ -1,6 +1,7 @@
 import json
 
 def send_appointment(normalized_data):
+    # function is responsible for sending appointment details
     department = normalized_data["department"]
     date = normalized_data["date"]
     time = normalized_data["time"]
