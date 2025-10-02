@@ -23,7 +23,7 @@ def optimal_character_recognition():
     ocr_result = text_extraction_from_noisy_image(image_path)
     return ocr_result
 
-@app.route('/ner', methods=['GET'])
+@app.route('/ner', methods=['GET', 'POST'])
 def named_entity_recognition():
     raw_text = request.get_json().get('raw_text') if request.is_json else None
     if not raw_text:
@@ -34,7 +34,7 @@ def named_entity_recognition():
     ner_result = entity_recognition(content)
     return ner_result
 
-@app.route('/normalize', methods=['GET'])
+@app.route('/normalize', methods=['GET', 'POST'])
 def normalize_entities():
     entities = request.get_json().get('entities') if request.is_json else None
     entities_confidence = request.get_json().get('entities_confidence') if request.is_json else None
@@ -43,10 +43,10 @@ def normalize_entities():
     normalize_result = normalize_entities_with_gemini(entities, entities_confidence)
     return normalize_result
 
-@app.route('/appointment', methods=['GET'])
+@app.route('/appointment', methods=['GET', 'POST'])
 def schedule_of_appointment():
-    normalized_entities = request.get_json().get('normalized') if request.is_json else None
-    normalized_entities_confidence = request.get_json().get('normalized_confidence') if request.is_json else None
+    normalized_entities = request.get_json().get('normalized_entities') if request.is_json else None
+    normalized_entities_confidence = request.get_json().get('normalized_entities_confidence') if request.is_json else None
     if not normalized_entities or not normalized_entities_confidence:
         return {"error": "Please provide normalized and normalized_confidence parameters"}, 400
     appointment_result = send_appointment({

@@ -13,8 +13,8 @@ def normalize_entities_with_gemini(entities, entities_confidence, tz="Asia/Kolka
     Normalize date, time, and department using Gemini only if entities_confidence is 1.0.
     Otherwise, return guardrail JSON for ambiguous input.
     """
-    threshold = 0.8 
-    if entities_confidence < 1.0:
+    threshold = 0.7
+    if entities_confidence < threshold:
         return {"status":"needs_clarification",
                 "message":"Ambiguous date/time or department"}
     now = datetime.now()
@@ -73,7 +73,6 @@ def normalize_entities_with_gemini(entities, entities_confidence, tz="Asia/Kolka
 
     try:
         result = json.loads(result_text)
-        # Check for ambiguity
         if (result.get("date_confidence", 0.0) < threshold or
             result.get("time_confidence", 0.0) < threshold or
             result.get("department_confidence", 0.0) < threshold):
@@ -81,8 +80,8 @@ def normalize_entities_with_gemini(entities, entities_confidence, tz="Asia/Kolka
                     "message":"Ambiguous date/time or department"}
 
         return {
-            "normalized": result.get("normalized"),
-            "normalization_confidence": round(
+            "normalized_entities": result.get("normalized"),
+            "normalized_entities_confidence": round(
                 (result["date_confidence"] + result["time_confidence"] + result["department_confidence"])/3, 2
             )
         }
