@@ -1,4 +1,4 @@
-# Appointify 🩺🤖  
+# Appointify 
 **AI-Powered Appointment Scheduler Assistant**
 
 Appointify is a backend system designed to simplify appointment scheduling using **AI-powered entity recognition, OCR, and natural language processing**.  
@@ -6,7 +6,7 @@ It extracts and normalizes appointment details such as **date, time, and departm
 
 ---
 
-## 🚀 Features
+## Features
 - Extracts **appointment details** (date, time, department) from raw text.
 - Supports **OCR (Optical Character Recognition)** to parse text from uploaded images.
 - Uses **NLP (Gemini/LLM)** for entity recognition.
@@ -30,7 +30,7 @@ Appointify/
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 ```bash
 # 1. Clone the repository
@@ -51,4 +51,5 @@ pip install -r requirements.txt
 
 # 5. Run the Flask server
 python main.py
+
 
